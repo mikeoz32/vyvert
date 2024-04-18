@@ -16,7 +16,7 @@ from typing import (
 from vyvert.datastructures import Dependant, Depends
 
 
-def run_in_threadpool(func: Callable[..., Any], *args, **kwargs):
+async def run_in_threadpool(func: Callable[..., Any], *args, **kwargs):
     if kwargs:  # pragma: no cover
         # run_sync doesn't accept 'kwargs', so bind them in here
         func = functools.partial(func, **kwargs)
@@ -189,7 +189,7 @@ async def solve_dependencies(
 
 async def call_with_deps(call: Callable[..., Any], ctx={}):
     result = await solve_dependencies(
-        dependant=get_dependant(call=call, name="_"), ctx={"just_param": 10}
+        dependant=get_dependant(call=call, name="_"), ctx=ctx
     )
 
     (values, errors) = result
